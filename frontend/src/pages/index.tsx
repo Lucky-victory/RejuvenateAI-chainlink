@@ -9,6 +9,7 @@ import Footer from '@/components/footer';
 import { useDisclosure } from '@chakra-ui/react';
 import RegisterForm from '@/components/register-form';
 import 'swiper/css';
+import BlogSection from '@/components/blog-section';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
       <WorkWithUs />
       <TalkToNutritionist />
       <CTA />
+      <BlogSection/>
       <Footer />
     </div>
   );
