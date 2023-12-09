@@ -8,7 +8,7 @@ import Icon from '../Icon';
 
 export default function CustomHuddle({}) {
   const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-  const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID as string;
+  const PROJECT_ID = process.env.NEXT_PUBLIC_WC_PROJECT_ID as string;
   const { initialize, isInitialized } = useHuddle01();
   const { joinLobby } = useLobby();
 
