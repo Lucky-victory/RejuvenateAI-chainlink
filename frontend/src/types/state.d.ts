@@ -28,9 +28,11 @@ export type stateContextType = {
   setIsUserConnected: (data: boolean) => void;
   user: any;
   setUser: (data: any) => void;
+  community: any;
+  setCommunity: (data: any) => void;
 };
 
-export type Community = {
+export interface Community {
   name: string;
   description: string;
   cover: string;

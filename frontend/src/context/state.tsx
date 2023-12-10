@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
-import { stateContextType } from '../types/state';
+import { stateContextType, User } from '../types/state';
 import { useAccount, useNetwork, useWalletClient } from 'wagmi';
 
 const contextDefaultValue: stateContextType = {
@@ -14,6 +14,8 @@ const contextDefaultValue: stateContextType = {
   setIsUserConnected: () => null,
   user: {},
   setUser: () => null,
+  community: {},
+  setCommunity: () => null,
 };
 
 type StateContextProviderProps = {
@@ -30,6 +32,33 @@ export function AppWrapper({ children }: StateContextProviderProps) {
   const [address, setAddress] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [isUserConnected, setIsUserConnected] = useState<boolean>(false);
+  const [nutritionist, setNutritionist] = useState('');
+  const [community, setCommunity] = useState({
+    id: '',
+    name: '',
+    membersCount: "",
+    groupChat: {
+      groupName: '',
+      groupChatId: '',
+      description: '',
+      image: '',
+      members: [],
+      admins: [],
+      private: false,
+      rules: {
+        entry: { conditions: [] },
+        chat: { conditions: [] },
+      },
+      events: {
+        eventName: '',
+        description: '',
+      },
+      challenges: {
+        name: '',
+        description: '',
+      },
+    },
+  });
 
   const [user, setUser] = useState({
     userAddress: '',
@@ -39,7 +68,6 @@ export function AppWrapper({ children }: StateContextProviderProps) {
     endDate: '',
     amount: '',
   });
-  const [nutritionist, setNutritionist] = useState('');
 
   let sharedState = {
     allTokensData,
@@ -51,7 +79,9 @@ export function AppWrapper({ children }: StateContextProviderProps) {
     isUserConnected,
     setIsUserConnected,
     user,
-    setUser
+    setUser,
+    community,
+    setCommunity,
   };
 
   return (

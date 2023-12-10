@@ -4,14 +4,17 @@ import type { AppProps } from 'next/app';
 import Providers from './providers';
 import Head from 'next/head';
 import { Poppins } from 'next/font/google';
-import { WagmiConfig, createConfig, configureChains } from "wagmi";
+import { WagmiConfig, createConfig, configureChains } from 'wagmi';
 
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import "@rainbow-me/rainbowkit/styles.css";
-import { arbitrumGoerli } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import { useEffect, useState } from "react";
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
+import { arbitrumGoerli } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+import { useEffect, useState } from 'react';
+// import styled from 'styled-components';
 
+import { ChatUIProvider } from '@pushprotocol/uiweb';
+import { darkChatTheme } from '@pushprotocol/uiweb';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [arbitrumGoerli],
@@ -28,23 +31,18 @@ const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
-
 const { connectors } = getDefaultWallets({
-  appName: "RejuvenateAI",
+  appName: 'RejuvenateAI',
   projectId: projectId,
   chains,
 });
 
-const config = createConfig(
-  {
-    autoConnect: true,
-    connectors,
-    publicClient,
-    webSocketPublicClient,
-  }
- 
-);
-
+const config = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+  webSocketPublicClient,
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   //const [isLoaded, setIsLoaded] = useState(false);
@@ -53,13 +51,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>RejuvenateAI</title>
       </Head>
+ 
       <WagmiConfig config={config}>
-    <RainbowKitProvider chains={chains} modalSize="compact">
-      <Providers>
-        <Component {...pageProps} className={poppins.className} />
-      </Providers>
-      </RainbowKitProvider>
-  </WagmiConfig>
+        <RainbowKitProvider chains={chains} modalSize='compact'>
+        
+          <Providers>
+            
+            <Component {...pageProps} className={poppins.className} />
+          </Providers>
+         
+        </RainbowKitProvider>
+      </WagmiConfig>
+      
     </>
   );
 }
