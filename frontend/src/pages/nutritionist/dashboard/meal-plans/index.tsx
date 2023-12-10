@@ -13,7 +13,7 @@ import {
   Text,
   Th,
   Thead,
-  Tr,Modal,ModalBody,ModalCloseButton,ModalContent,ModalHeader,ModalOverlay, useDisclosure, Stack, FormControl, Input, Select, Textarea, FormLabel, FormHelperText, HStack
+  Tr,Modal,ModalBody,ModalCloseButton,ModalContent,ModalHeader,ModalOverlay, useDisclosure, Stack, FormControl, Input, Select, Textarea, FormLabel, FormHelperText, HStack, useToast
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,14 +21,22 @@ import * as Yup from 'yup';
 import { format } from 'date-fns';
 import NutritionistDashBoardLayout from '../layout';
 import { useState } from 'react';
-import { MealPlan } from '@/types/state';
+import { MealPlan } from '@/types/shared';
 import {v4 as uuid} from 'uuid'
+import { useAppContext } from '@/context/state';
+import { shortenText } from '@/helpers';
 
 export default function DashBoard() {
   const today = new Date().getTime();
 const {isOpen,onClose,onOpen}=useDisclosure();
 const [isSubmitting,setIsSubmitting]=useState(false)
-
+const {user,mealPlans,setMealPlans}=useAppContext()
+ const toast = useToast({
+    duration: 3000,
+    position: 'top',
+    status: 'success',
+    title: 'Meal Plan added successfully',
+  });
   // form validation rules
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Field is required'),
@@ -39,7 +47,7 @@ const [isSubmitting,setIsSubmitting]=useState(false)
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState,reset } = useForm(formOptions);
+  const { register, handleSubmit, formState,reset,setValue } = useForm(formOptions);
   const { errors, isValid} = formState;
   const onValidSubmit=(data:any)=>{
 if(isValid){
@@ -47,22 +55,34 @@ const dataObject={
   id:uuid(),
   title:data?.title,
   time:data?.time,
-  details:data?.details,createdAt:new Date().getTime()
+  details:data?.details,createdAt:new Date().getTime(),
+  userAddress:user?.userAddress
 }
 console.log('meal plan',{dataObject})
-setIsSubmitting(true)
+setIsSubmitting(true);
 setTimeout(()=>{
   setIsSubmitting(false)
-
+  
+  const prevPlans=mealPlans||[];
+  setMealPlans([...prevPlans,dataObject])
+toast()
   reset()
   onClose()
 },3000)
 }
   }
+
+
+  function editMealPlan(plan:MealPlan){
+    onOpen()
+setValue('time',plan.time) 
+setValue('title',plan.title)
+setValue('details',plan.details)
+  }
   return (
     <NutritionistDashBoardLayout>
 
-<Modal isOpen={isOpen} onClose={onClose} size={'lg'} closeOnOverlayClick={false}>
+<Modal isOpen={isOpen} onClose={()=>{onClose();reset()}} size={'lg'} closeOnOverlayClick={false}>
 <ModalOverlay/>
   <ModalContent>
 
@@ -86,9 +106,9 @@ setTimeout(()=>{
       <FormLabel htmlFor='meal-time'>Choose Meal Time</FormLabel>
     <Select id='meal-time' defaultValue={''} {...register('time')} >
       <option value="" disabled></option>
-      <option value="breakfast">Breakfast</option>
-      <option value="lunch">Lunch</option>
-      <option value="dinner">Dinner</option>
+      <option value="Breakfast">Breakfast</option>
+      <option value="Lunch">Lunch</option>
+      <option value="Dinner">Dinner</option>
     </Select>
     <Text my={2} color='red.600'>{errors.time?.message}</Text>
 
@@ -131,6 +151,14 @@ setTimeout(()=>{
         </Button>
       </Flex>
 
+{!mealPlans?.length &&
+
+<Flex bg={'gray.100'} minH={'250px'} my={5} justify={'center'} align={'center'}>
+  <Text color={'gray.500'} fontWeight={'medium'} fontSize={'xl'}>You don't any meal plan yet.</Text>
+</Flex>
+}
+{mealPlans?.length &&
+
       <TableContainer my={6}>
         <Table>
           <Thead bg={'white'} className='mb-4'>
@@ -142,63 +170,41 @@ setTimeout(()=>{
             </Tr>
           </Thead>
           <Tbody>
-            <Tr bg={'white'} rounded={'md'} my={4}>
-              <Td>Breakfast</Td>
-              <Td>Bread with Chocolate</Td>
-              <Td minW={'300'} maxW={400}>
-                Bread and chocolate is a great choice...
-              </Td>
-              <Td>
-                <Flex gap={2}>
-                  <Button
-                    size={'sm'}
-                    variant={'outline'}
-                    rounded={'full'}
-                    className='text-primaryGreen'
-                  >
-                    View
-                  </Button>
-                  <Button
-                    size={'sm'}
-                    variant={'outline'}
-                    rounded={'full'}
-                    className='text-primaryGreen'
-                  >
-                    Edit
-                  </Button>
-                </Flex>
-              </Td>
-            </Tr>
-            <Tr bg={'white'} rounded={'md'} my={4}>
-              <Td>Lunch</Td>
-              <Td>Fried Rice and Chicken</Td>
-              <Td minW={'200px'} maxW={350}>
-                Fried Rice and Chicken is a great choice...
-              </Td>
-              <Td>
-                <Flex gap={2}>
-                  <Button
-                    size={'sm'}
-                    variant={'outline'}
-                    rounded={'full'}
-                    className='text-primaryGreen'
-                  >
-                    View
-                  </Button>
-                  <Button
-                    size={'sm'}
-                    variant={'outline'}
-                    rounded={'full'}
-                    className='text-primaryGreen'
-                  >
-                    Edit
-                  </Button>
-                </Flex>
-              </Td>
-            </Tr>
+            {mealPlans?.map((mealPlan)=>
+             <Tr key={mealPlan?.id} bg={'white'} rounded={'md'} my={4}>
+             <Td>{mealPlan?.time}</Td>
+             <Td>{mealPlan?.title}</Td>
+             <Td minW={'300'} maxW={400}>
+              {shortenText(mealPlan?.details||'')}
+             </Td>
+             <Td>
+               <Flex gap={2}>
+                 <Button
+                   size={'sm'}
+                   variant={'outline'}
+                   rounded={'full'}
+                   className='text-primaryGreen'
+                 >
+                   View
+                 </Button>
+                 <Button
+                   size={'sm'}
+                   variant={'outline'}
+                   rounded={'full'}
+                   className='text-primaryGreen' onClick={()=>editMealPlan(mealPlan)}
+                 >
+                   Edit
+                 </Button>
+               </Flex>
+             </Td>
+           </Tr>
+
+            )}
+                      
           </Tbody>
         </Table>
       </TableContainer>
+}
     </Box>
     
     </NutritionistDashBoardLayout>

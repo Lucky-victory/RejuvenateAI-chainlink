@@ -2,11 +2,11 @@
 import { createContext, useContext, useState } from 'react';
 import { Community, User, stateContextType } from '../types/state';
 import { useAccount, useNetwork, useWalletClient } from 'wagmi';
-
+import { MealPlan} from '@/types/shared'
 const defaultCommunities = [
   {
     name: 'All for good',
-    id: 1,
+    id: '1',
     slug: 'all-for-good-erd4',
     membersCount: 20,
     members: [{}],
@@ -16,7 +16,7 @@ const defaultCommunities = [
   },
   {
     name: 'Live life to fullness',
-    id: 2,
+    id: '2',
     slug: 'live-life-to-fullness-fed3',
     membersCount: 10,
     members: [{}],
@@ -26,7 +26,7 @@ const defaultCommunities = [
   },
   {
     name: 'Meet your faves',
-    id: 3,
+    id: '3',
     slug: 'meet-your-faves-acd2',
     membersCount: 45,
     members: [{}],
@@ -51,6 +51,8 @@ const contextDefaultValue: stateContextType = {
   community:null,
   setCommunities:()=> null,
   setCommunity:()=>null,
+  mealPlans: [] as MealPlan[],
+  setMealPlans: ()=>null
 };
 
 type StateContextProviderProps = {
@@ -67,6 +69,7 @@ export function AppWrapper({ children }: StateContextProviderProps) {
   const [address, setAddress] = useState<string>('');
   const [community, setCommunity] = useState<Community|null>(null);
   const [communities, setCommunities] = useState<Community[]>(defaultCommunities);
+  const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isUserConnected, setIsUserConnected] = useState<boolean>(false);
 
@@ -81,6 +84,8 @@ export function AppWrapper({ children }: StateContextProviderProps) {
   const [nutritionist, setNutritionist] = useState('');
 
   let sharedState = {
+    mealPlans,
+    setMealPlans,
     allTokensData,
     setAllTokenData,
     address,

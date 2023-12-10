@@ -25,6 +25,8 @@ export type stateContextType = {
   setCommunities:(data:Community[])=>void
   community:Community|null;
   setCommunity:(data:Community|null)=>void
+  mealPlans:MealPlan[]|null;
+  setMealPlans:(data:MealPlans[])=>void
 };
 export type User={
   userAddress: string,
@@ -39,7 +41,7 @@ export type Community = {
   description: string;
   cover: string;
   membersCount: number;
-  id: number;
+  id: string;
   slug: string;
   members: object[];
   messages?:ChatMessages[]|null
@@ -51,11 +53,3 @@ export type ChatMessages = {
   fullname: string;
   timestamp: Date | number;
 };
-
-export type MealPlan={
-  id:string;
-  time:string;title:string;
-  details:string;
-  createdAt:number|Date;
-  updatedAt?:number|Date
-}

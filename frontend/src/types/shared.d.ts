@@ -5,3 +5,12 @@ title:string;content:string;image?:string;status?:ArticleStatus,intro?:string;cr
 }
 }
 export type ArticleStatus='published'|'draft'
+
+export type MealPlan={
+    id:string;
+    time:string;title:string;
+    details:string;
+    createdAt:number|Date;
+    updatedAt?:number|Date
+    userAddress:string
+  }

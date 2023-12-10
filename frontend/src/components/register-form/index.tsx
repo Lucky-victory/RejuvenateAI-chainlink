@@ -27,6 +27,7 @@ import {
   HStack,
   Input,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 import { NewUserType, RegisterType } from '../new-user-type';
 //import { useAuth } from "near-social-bridge";
@@ -49,6 +50,14 @@ const RegisterForm = ({
 }) => {
   //const auth = useAuth()
   const { address } = useAccount();
+  
+  const toast = useToast({
+    duration: 3000,
+    position: 'top',
+    status: 'success',
+    title: 'Sign up was successful',
+  });
+  const [isSubmitting,setIsSubmitting]=useState(false)
   const router = useRouter();
   const swiperRef = useRef<SwiperRef>();
   const swiperNestedRef = useRef<SwiperRef>();
@@ -78,7 +87,7 @@ const RegisterForm = ({
     smokingLength: Yup.string(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState,reset } = useForm(formOptions);
 
   // get functions to build form with useForm() hook
   const { errors, isValid, isSubmitSuccessful } = formState;
@@ -106,11 +115,14 @@ const RegisterForm = ({
 
 
   const onValidSubmit = async (data: any) => {
-    if (isSubmitSuccessful) {
-      console.log({ data });
+    try{
+
+      if (isSubmitSuccessful) {
+        console.log({ data });
     }
     //    const cid = await uploadPromptToIpfs(data);
     if (isValid) {
+      setIsSubmitting(true)
         // Serialize the form data into a JSON object
       const formDataObject = {
         fullName: data.fullName,
@@ -128,7 +140,7 @@ const RegisterForm = ({
         smokingStopped: data.smokingStopped,
         smokingLength: data.smokingLength,
       };
-
+      
       const cid = await putJSONandGetHash(formDataObject);
       
       setCid(cid);
@@ -140,7 +152,20 @@ const RegisterForm = ({
       });
 
       joinCommunity?.();
+
+      toast()
+      reset()
+setIsSubmitting(false);
+
     }
+  }
+  catch(error){
+setIsSubmitting(false);
+toast({
+  status:'error',title:'An error occured, please try again...',description:'Make sure you have a gas fee'
+})
+
+  }
   };
   //   const onInvalidSubmit = (errors:any,event:BaseSyntheticEvent) => {
   // event.preventDefault()
@@ -560,7 +585,7 @@ const RegisterForm = ({
                             Back
                           </Button>
 
-                          <Button type='submit'>
+                          <Button type='submit' isLoading={isSubmitting}>
                             Complete Sign Up
                           </Button>
                         </HStack>
