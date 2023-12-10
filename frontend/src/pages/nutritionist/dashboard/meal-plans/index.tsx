@@ -21,13 +21,13 @@ import * as Yup from 'yup';
 import { format } from 'date-fns';
 import NutritionistDashBoardLayout from '../layout';
 import { useState } from 'react';
-
+import { MealPlan } from '@/types/state';
+import {v4 as uuid} from 'uuid'
 
 export default function DashBoard() {
   const today = new Date().getTime();
 const {isOpen,onClose,onOpen}=useDisclosure();
 const [isSubmitting,setIsSubmitting]=useState(false)
-const [formData,setFormData]=useState({title:'',time:'',details:''})
 
   // form validation rules
   const validationSchema = Yup.object().shape({
@@ -39,14 +39,22 @@ const [formData,setFormData]=useState({title:'',time:'',details:''})
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState,reset } = useForm(formOptions);
   const { errors, isValid} = formState;
   const onValidSubmit=(data:any)=>{
 if(isValid){
-setFormData((prev)=>({...prev,...data}))
-
+const dataObject={
+  id:uuid(),
+  title:data?.title,
+  time:data?.time,
+  details:data?.details,createdAt:new Date().getTime()
+}
+console.log('meal plan',{dataObject})
+setIsSubmitting(true)
 setTimeout(()=>{
+  setIsSubmitting(false)
 
+  reset()
   onClose()
 },3000)
 }

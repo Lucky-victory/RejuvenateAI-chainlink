@@ -1,7 +1,6 @@
 'use client';
 import Icon from '@/components/Icon';
 import { ChatMessages, Community } from '@/types/state';
-import { format } from 'date-fns';
 import {
   Avatar,
   Box,
@@ -23,86 +22,18 @@ import BoringAvatars from 'boring-avatars';
 import { KeyboardEvent, useState } from 'react';
 import { MdChat, MdEvent, MdViewAgenda } from 'react-icons/md';
 import { formatChatTimestamp, maskHexAddress } from '@/helpers';
-import { useAccount } from 'wagmi';
+
 import { useAppContext } from '@/context/state';
-// import { randomUUID } from 'crypto';
+import { nanoid } from 'nanoid';
+
 
 
 export default function CommunityViewPage() {
   const [messageToSend, setMessageToSend] = useState('');
-  const { address } = useAccount();
-  const {community,setCommunity}=useAppContext()
-  // const sampleCommunity: Community & { messages: Array<ChatMessages> } = {
-  //   name: 'All for good',
-  //   id: 1,
-  //   slug: 'all-for-good-erd4',
-  //   membersCount: 20,
-  //   messages: [
-  //     {
-  //       id: '1',
-  //       content: 'Hello there!',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'John Doe',
-  //       timestamp: 1700825400000,
-  //     },
-  //     {
-  //       id: '2',
-  //       content: "Hey, how's it going?",
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'Jane Smith',
-  //       timestamp: 1700825400000,
-  //     },
-  //     {
-  //       id: '3',
-  //       content: "I'm doing well, thanks!",
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'John Doe',
-  //       timestamp: 1700922600000,
-  //     },
-  //     {
-  //       id: '4',
-  //       content: 'What about you?',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'Jane Smith',
-  //       timestamp: 1700922601750,
-  //     },
-  //     {
-  //       id: '5',
-  //       content: 'Just relaxing at home.',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'John Doe',
-  //       timestamp: 1700922623000,
-  //     },
-  //     {
-  //       id: '6',
-  //       content: 'Nice! Anything exciting happening?',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'Jane Smith',
-  //       timestamp: 1700994295507,
-  //     },
-  //     {
-  //       id: '7',
-  //       content: 'Not much, just enjoying the day.',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'John Doe',
-  //       timestamp: 1700991000000,
-  //     },
-  //     {
-  //       id: '8',
-  //       content: 'Sounds nice! Have a great day!',
-  //       userAddress: '0x456****8bc45',
-  //       fullname: 'Jane Smith',
-  //       timestamp: 1700991000000,
-  //     },
-  //   ],
+  
+  const {community,setCommunity,user}=useAppContext()
 
-  //   members: [{}],
-  //   cover: '',
-  //   description:
-  //     'Join a movement that goes beyond personal well-being. In the "All for Good" nutrition community, we believe in the power of nutrition to create positive change. Share your journey towards a healthier you, engage in impactful discussions about sustainable eating, and explore how good nutrition can contribute to a better world. Every meal counts, and together, we\'re making choices that are "All for Good."',
-  // };
   const [chats, setChats] = useState<ChatMessages[]>(community?.messages as ChatMessages[]);
-  const randomID = () => Math.random().toString(32).substring(2);
 
   function handleInputKeyUp(evt: KeyboardEvent) {
     if (evt.key == 'Enter' && messageToSend !== '') {
@@ -114,9 +45,9 @@ const prevChats=chats||[];
 const newChats=[...prevChats, {
   timestamp: new Date().getTime(),
   content: messageToSend,
-  userAddress: maskHexAddress(address as string),
-  id: randomID(),
-  fullname: 'Lucky Victory',
+  userAddress: maskHexAddress(user?.userAddress  as string),
+  id: nanoid(),
+  fullname: user?.name,
 }]
     setChats(() => [...newChats]);
     setMessageToSend('');

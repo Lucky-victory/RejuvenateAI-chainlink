@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
-import { Community, stateContextType } from '../types/state';
+import { Community, User, stateContextType } from '../types/state';
 import { useAccount, useNetwork, useWalletClient } from 'wagmi';
 
 const defaultCommunities = [
@@ -45,7 +45,7 @@ const contextDefaultValue: stateContextType = {
   setLoading: () => null,
   isUserConnected: false,
   setIsUserConnected: () => null,
-  user: {},
+  user: {} as User,
   setUser: () => null,
   communities:defaultCommunities,
   community:null,
@@ -70,7 +70,7 @@ export function AppWrapper({ children }: StateContextProviderProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [isUserConnected, setIsUserConnected] = useState<boolean>(false);
 
-  const [user, setUser] = useState({
+  const [user, setUser] = useState<User>({
     userAddress: '',
     name: '',
     userCidData: '',
