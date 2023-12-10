@@ -1,6 +1,7 @@
 import { useAppContext } from "@/context/state";
-import { Button } from "@chakra-ui/react"
+import { Button,Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import Icon from './Icon';
 
 const LogoutButton = () => {
   const router=useRouter();
@@ -10,9 +11,7 @@ setUser(null)
     router.push('/')
   }
   return (
-  <Button onClick={()=>handleLogout()}>
-
-  </Button>
+  <Button onClick={()=>handleLogout()} size={'sm'} variant={'outline'} colorScheme='red' rounded={'full'}><Text mr={2} as={'span'}>Logout</Text> <Icon  size={20} name='logout'/></Button>
   )
 }
 
