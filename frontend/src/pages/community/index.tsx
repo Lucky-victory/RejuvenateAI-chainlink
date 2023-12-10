@@ -22,59 +22,32 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import BoringAvatar from 'boring-avatars';
 //@ts-ignore
 import DatePicker from 'react-datepicker';
 import { Community } from '@/types/state';
+import { useAppContext } from '@/context/state';
+import { useRouter } from 'next/router';
 
-const communities = [
-  {
-    name: 'All for good',
-    id: 1,
-    slug: 'all-for-good-erd4',
-    membersCount: 20,
-    members: [{}],
-    cover: '',
-    description:
-      'Join a movement that goes beyond personal well-being. In the "All for Good" nutrition community, we believe in the power of nutrition to create positive change. Share your journey towards a healthier you, engage in impactful discussions about sustainable eating, and explore how good nutrition can contribute to a better world. Every meal counts, and together, we\'re making choices that are "All for Good."',
-  },
-  {
-    name: 'Live life to fullness',
-    id: 2,
-    slug: 'live-life-to-fullness-fed3',
-    membersCount: 10,
-    members: [{}],
-    cover: '',
-    description:
-      'Experience a community that encourages you to savor every bite and live life to the fullest through mindful nutrition. In "Live Life to Fullness," we embrace a holistic approach to well-being, celebrating the pleasures of nourishing both body and soul. Discover a wealth of resources, connect with fellow members on a journey to vitality, and learn how to make every aspect of your life more fulfilling through balanced and joyful nutrition.',
-  },
-  {
-    name: 'Meet your faves',
-    id: 3,
-    slug: 'meet-your-faves-acd2',
-    membersCount: 45,
-    members: [{}],
-    cover: '',
-    description:
-      'Discover a vibrant community where nutrition enthusiasts unite to share their favorite recipes, wellness tips, and success stories. Connect with like-minded individuals, learn from nutrition experts, and celebrate the joy of nourishing your body. In "Meet Your Faves," we believe that building a supportive network is key to embracing a healthier lifestyle together.',
-  },
-];
-const sectionTimes = [30, 45, 60, 90, 120];
+
+
 export default function NutritionistPage() {
-  const toast = useToast({
-    duration: 3000,
-    position: 'top',
-    status: 'success',
-    title: 'Your appointment was booked successfully',
-  });
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const toast = useToast({
+  //   duration: 3000,
+  //   position: 'top',
+  //   status: 'success',
+  //   title: 'Your appointment was booked successfully',
+  // });
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
     null
   );
-
-  const handleJoin = (community: Community) => {
-    setSelectedCommunity(community);
+  const router=useRouter()
+const {communities,setCommunity}=useAppContext()
+  const handleJoin = (community: Community|null) => {
+    setCommunity(community);
+router.push('/community/'+community?.slug)
   };
 
   return (
@@ -91,7 +64,7 @@ export default function NutritionistPage() {
           Find people with similar interest
         </Heading>
         <Flex gap={6} wrap={'wrap'}>
-          {communities.map((c, i) => {
+          {communities?.map((c, i) => {
             return (
               <Box
                 maxW={{ lg: '50%' }}

@@ -44,6 +44,7 @@
     "i": "^0.3.7",
     "lokijs": "1.x",
     "material-symbols": "^0.13.0",
+    "nanoid": "^5.0.4",
     "next": "13.4.19",
     "pino-pretty": "^10.2.3",
     "postcss": "8.4.29",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@types/uuid": "^9.0.7",
     "commitizen": "^4.3.0",
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",

@@ -35,7 +35,7 @@ import SwiperMain from 'swiper';
 import Icon from '../Icon';
 import NutritionistForm from '../nutritionist-form';
 import { countries } from '@/utils/countries';
-import { putJSONandGetHash } from '@/helpers/prompt';
+import { putJSONandGetHash } from '@/helpers';
 import { useDebounce } from '@/hooks/useDebounce';
 import { communityAbi } from '../../../abis';
 import { communityAddr } from '@/utils/constants';

@@ -1,6 +1,6 @@
 'use client';
 import Icon from '@/components/Icon';
-import { Community } from '@/types/state';
+import { ChatMessages, Community } from '@/types/state';
 import { format } from 'date-fns';
 import {
   Avatar,
@@ -22,90 +22,86 @@ import {
 import BoringAvatars from 'boring-avatars';
 import { KeyboardEvent, useState } from 'react';
 import { MdChat, MdEvent, MdViewAgenda } from 'react-icons/md';
-import { formatChatTimestamp, maskHexAddress } from '@/helpers/prompt';
+import { formatChatTimestamp, maskHexAddress } from '@/helpers';
 import { useAccount } from 'wagmi';
+import { useAppContext } from '@/context/state';
 // import { randomUUID } from 'crypto';
 
-type ChatMessages = {
-  id: string;
-  content: string;
-  userAddress: string;
-  fullname: string;
-  timestamp: Date | number;
-};
+
 export default function CommunityViewPage() {
   const [messageToSend, setMessageToSend] = useState('');
   const { address } = useAccount();
-  const community: Community & { messages: Array<ChatMessages> } = {
-    name: 'All for good',
-    id: 1,
-    slug: 'all-for-good-erd4',
-    membersCount: 20,
-    messages: [
-      {
-        id: '1',
-        content: 'Hello there!',
-        userAddress: '0x456****8bc45',
-        fullname: 'John Doe',
-        timestamp: 1700825400000,
-      },
-      {
-        id: '2',
-        content: "Hey, how's it going?",
-        userAddress: '0x456****8bc45',
-        fullname: 'Jane Smith',
-        timestamp: 1700825400000,
-      },
-      {
-        id: '3',
-        content: "I'm doing well, thanks!",
-        userAddress: '0x456****8bc45',
-        fullname: 'John Doe',
-        timestamp: 1700922600000,
-      },
-      {
-        id: '4',
-        content: 'What about you?',
-        userAddress: '0x456****8bc45',
-        fullname: 'Jane Smith',
-        timestamp: 1700922601750,
-      },
-      {
-        id: '5',
-        content: 'Just relaxing at home.',
-        userAddress: '0x456****8bc45',
-        fullname: 'John Doe',
-        timestamp: 1700922623000,
-      },
-      {
-        id: '6',
-        content: 'Nice! Anything exciting happening?',
-        userAddress: '0x456****8bc45',
-        fullname: 'Jane Smith',
-        timestamp: 1700994295507,
-      },
-      {
-        id: '7',
-        content: 'Not much, just enjoying the day.',
-        userAddress: '0x456****8bc45',
-        fullname: 'John Doe',
-        timestamp: 1700991000000,
-      },
-      {
-        id: '8',
-        content: 'Sounds nice! Have a great day!',
-        userAddress: '0x456****8bc45',
-        fullname: 'Jane Smith',
-        timestamp: 1700991000000,
-      },
-    ],
+  const {community,setCommunity}=useAppContext()
+  // const sampleCommunity: Community & { messages: Array<ChatMessages> } = {
+  //   name: 'All for good',
+  //   id: 1,
+  //   slug: 'all-for-good-erd4',
+  //   membersCount: 20,
+  //   messages: [
+  //     {
+  //       id: '1',
+  //       content: 'Hello there!',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'John Doe',
+  //       timestamp: 1700825400000,
+  //     },
+  //     {
+  //       id: '2',
+  //       content: "Hey, how's it going?",
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'Jane Smith',
+  //       timestamp: 1700825400000,
+  //     },
+  //     {
+  //       id: '3',
+  //       content: "I'm doing well, thanks!",
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'John Doe',
+  //       timestamp: 1700922600000,
+  //     },
+  //     {
+  //       id: '4',
+  //       content: 'What about you?',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'Jane Smith',
+  //       timestamp: 1700922601750,
+  //     },
+  //     {
+  //       id: '5',
+  //       content: 'Just relaxing at home.',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'John Doe',
+  //       timestamp: 1700922623000,
+  //     },
+  //     {
+  //       id: '6',
+  //       content: 'Nice! Anything exciting happening?',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'Jane Smith',
+  //       timestamp: 1700994295507,
+  //     },
+  //     {
+  //       id: '7',
+  //       content: 'Not much, just enjoying the day.',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'John Doe',
+  //       timestamp: 1700991000000,
+  //     },
+  //     {
+  //       id: '8',
+  //       content: 'Sounds nice! Have a great day!',
+  //       userAddress: '0x456****8bc45',
+  //       fullname: 'Jane Smith',
+  //       timestamp: 1700991000000,
+  //     },
+  //   ],
 
-    members: [{}],
-    cover: '',
-    description:
-      'Join a movement that goes beyond personal well-being. In the "All for Good" nutrition community, we believe in the power of nutrition to create positive change. Share your journey towards a healthier you, engage in impactful discussions about sustainable eating, and explore how good nutrition can contribute to a better world. Every meal counts, and together, we\'re making choices that are "All for Good."',
-  };
-  const [chats, setChats] = useState<Array<ChatMessages>>(community?.messages);
+  //   members: [{}],
+  //   cover: '',
+  //   description:
+  //     'Join a movement that goes beyond personal well-being. In the "All for Good" nutrition community, we believe in the power of nutrition to create positive change. Share your journey towards a healthier you, engage in impactful discussions about sustainable eating, and explore how good nutrition can contribute to a better world. Every meal counts, and together, we\'re making choices that are "All for Good."',
+  // };
+  const [chats, setChats] = useState<ChatMessages[]>(community?.messages as ChatMessages[]);
   const randomID = () => Math.random().toString(32).substring(2);
 
   function handleInputKeyUp(evt: KeyboardEvent) {
@@ -114,16 +110,15 @@ export default function CommunityViewPage() {
     }
   }
   function sendMessage() {
-    setChats((prev) => [
-      ...prev,
-      {
-        timestamp: new Date().getTime(),
-        content: messageToSend,
-        userAddress: maskHexAddress(address as string),
-        id: randomID(),
-        fullname: 'Lucky Victory',
-      },
-    ]);
+const prevChats=chats||[];
+const newChats=[...prevChats, {
+  timestamp: new Date().getTime(),
+  content: messageToSend,
+  userAddress: maskHexAddress(address as string),
+  id: randomID(),
+  fullname: 'Lucky Victory',
+}]
+    setChats(() => [...newChats]);
     setMessageToSend('');
   }
   return (
@@ -155,7 +150,7 @@ export default function CommunityViewPage() {
             </Heading>
           </Flex>
         </Flex>
-        <HStack alignItems={'start'} gap={6} my={6} px={6}>
+        <HStack alignItems={'start'} gap={6} my={6} px={6} divider={<StackDivider/>}>
           <Tabs flex={1} variant={'soft-rounded'} colorScheme='primaryColor'>
             <TabList>
               <Tab>
@@ -179,13 +174,21 @@ export default function CommunityViewPage() {
             </TabList>
             <TabPanels h={'full'} py={3}>
               <TabPanel pl={0}  minH={'400px'} pos={'relative'}>
-                <Box maxH={'350px'} overflowY={'auto'}>
+                <Box minH={300} maxH={'350px'} overflowY={'auto'}>
+
+                  {!chats?.length &&
+                  
+                  <Flex justify={'center'} minH='300' bg={'gray.100'} align={'center'}>
+<Text color={'gray.500'} fontWeight={'medium'} fontSize={'xl'}>No Chats yet</Text>
+                  </Flex>
+                  }
+              {chats?.length && 
                   <Stack
-                    divider={<StackDivider />}
-                    py={4}
-                    px={2}
-                    rounded={'md'}
-                    // bg={'gray.100'}
+                  divider={<StackDivider />}
+                  py={4}
+                  px={2}
+                  rounded={'md'}
+                  // bg={'gray.100'}
                   >
                     {chats?.map((message, i) => (
                       <HStack
@@ -208,7 +211,7 @@ export default function CommunityViewPage() {
                               color={'gray'}
                               fontSize={'sm'}
                               fontWeight={'medium'}
-                            >
+                              >
                               {formatChatTimestamp(message?.timestamp)}
                             </Text>
                           </HStack>
@@ -218,6 +221,7 @@ export default function CommunityViewPage() {
                       </HStack>
                     ))}
                   </Stack>
+                  }
                 </Box>
                 <HStack
                   pos={'sticky'}
@@ -247,7 +251,7 @@ export default function CommunityViewPage() {
               </TabPanel>
               <TabPanel>
                 <Flex
-                  minH={'200px'}
+                  minH={'300px'}
                   align={'center'}
                   justify={'center'}
                   bg={'gray.100'}
@@ -260,7 +264,7 @@ export default function CommunityViewPage() {
               </TabPanel>
               <TabPanel>
                 <Flex
-                  minH={'200px'}
+                  minH={'300px'}
                   align={'center'}
                   justify={'center'}
                   bg={'gray.100'}

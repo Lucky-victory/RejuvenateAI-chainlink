@@ -1,4 +1,4 @@
-import { maskHexAddress } from '@/helpers/prompt';
+import { maskHexAddress } from '@/helpers';
 import {  Button, HStack, Text } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import Avatar from 'boring-avatars'

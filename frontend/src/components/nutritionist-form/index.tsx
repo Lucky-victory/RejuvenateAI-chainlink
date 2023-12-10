@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { uploadPromptToIpfs } from '@/helpers/prompt';
+import { uploadPromptToIpfs } from '@/helpers';
 // import toast, { Toaster } from "react-hot-toast";
 import { toast } from 'react-toastify';
 import { Button, Input, Select } from '@chakra-ui/react';
