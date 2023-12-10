@@ -28,6 +28,10 @@ export type stateContextType = {
   setIsUserConnected: (data: boolean) => void;
   user: any;
   setUser: (data: any) => void;
+  communities:Community[]|null;
+  setCommunities:(data:Community[])=>void
+  community:Community|null;
+  setCommunity:(data:Community|null)=>void
 };
 
 export type Community = {
@@ -38,4 +42,12 @@ export type Community = {
   id: number;
   slug: string;
   members: object[];
+  messages?:ChatMessages[]|null
+};
+export type ChatMessages = {
+  id: string;
+  content: string;
+  userAddress: string;
+  fullname: string;
+  timestamp: Date | number;
 };

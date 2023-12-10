@@ -35,7 +35,7 @@ import SwiperMain from 'swiper';
 import Icon from '../Icon';
 import NutritionistForm from '../nutritionist-form';
 import { countries } from '@/utils/countries';
-import { putJSONandGetHash } from '@/helpers/prompt';
+import { putJSONandGetHash } from '@/helpers';
 import { useDebounce } from '@/hooks/useDebounce';
 import { communityAbi } from '../../../abis';
 import { communityAddr } from '@/utils/constants';
@@ -78,9 +78,9 @@ const RegisterForm = ({
     smokingLength: Yup.string(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
+  const { register, handleSubmit, formState } = useForm(formOptions);
 
   // get functions to build form with useForm() hook
-  const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors, isValid, isSubmitSuccessful } = formState;
   const [cid, setCid] = useState<string>('');
 

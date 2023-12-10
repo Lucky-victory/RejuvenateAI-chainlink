@@ -8,7 +8,13 @@ import {
   isYesterday,
   formatDistanceStrict,
 } from 'date-fns';
+import slugify from 'slugify'
+import {nanoid} from 'nanoid'
 
+
+export function shortenText(text:string,len=50){
+return text?.length > len? text?.substring(0,len)+'...':text
+}
 export const formatChatTimestamp = (timestamp: number | Date) => {
   const currentDate = new Date();
   const messageDate = new Date(timestamp);
@@ -21,7 +27,11 @@ export const formatChatTimestamp = (timestamp: number | Date) => {
     return format(messageDate, 'yyyy/M/d h:mm a');
   }
 };
-
+export function generateSlug(text:string){
+return slugify(text,{
+  lower:true,strict:true
+})+'-'+nanoid(10)
+}
 function getAccessToken() {
   return process.env.NEXT_PUBLIC_WEB3STORAGE_API_TOKEN;
 }

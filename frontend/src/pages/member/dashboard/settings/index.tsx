@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import DashBoardLayout from '../layout';
 import { useState } from 'react';
-import { convertCamelCaseToSpaceSeparated } from '@/helpers/prompt';
+import { convertCamelCaseToSpaceSeparated } from '@/helpers';
 
 export default function DashBoard() {
   const [basicInfo, setBasicInfo] = useState({

@@ -33,16 +33,16 @@ export default function DashboardSideBar(props: {
           textDecor={'none!important'}
           href={buildLink(props?.entryPath as string, link?.url)}
           alignItems={'center'}
-          className='flex gap-[40px]'
+          className='flex gap-[24px]'
         >
-          <Icon name={link?.icon} />
+          <Icon name={link?.icon} size={24}/>
           <span>{link?.title}</span>
         </Link>
       </ListItem>
     );
   });
   return (
-    <Box className='h-full bg-primaryGray w-[300px] sticky top-0 ' pt={2}>
+    <Box className='h-full bg-primaryGray min-w-[250px] sticky top-0 ' pt={2}>
       <Link href='/'>
         <Image
           alt=''
