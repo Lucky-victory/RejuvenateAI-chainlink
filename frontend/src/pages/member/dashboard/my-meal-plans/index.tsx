@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import DashBoardLayout from '../layout';
+import Link from 'next/link';
 export default function DashBoard() {
   const today = new Date().getTime();
   return (
@@ -36,7 +37,7 @@ export default function DashBoard() {
             {format(today, 'E, d MMM yyyy')}
           </Text>
         </Flex>
-        <Button className='bg-primaryGreen text-primaryBeige hover:bg-primaryYellow hover:text-primaryGreen'>
+        <Button as={Link} href={'/meal-plans'} className='bg-primaryGreen text-primaryBeige hover:bg-primaryYellow hover:text-primaryGreen'>
           Add Meal Plan
         </Button>
       </Flex>

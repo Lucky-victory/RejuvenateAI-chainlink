@@ -21,6 +21,9 @@ export type stateContextType = {
   setIsUserConnected: (data: boolean) => void;
   user: User;
   setUser: (data: any) => void;
+  setSelectedMealPlan:(data:MealPlan)=>void
+  selectedMealPlan:MealPlan|null;
+  
   communities: Community[] | null;
   setCommunities: (data: Community[]) => void
   community: Community | null;

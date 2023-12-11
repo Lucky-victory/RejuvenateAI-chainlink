@@ -8,11 +8,14 @@ import RegisterForm from '../register-form';
 import { useAccount, useEnsName, useEnsAvatar} from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
+import LogoutButton from '../LogoutButton';
 
 const Header = ({ bg = 'transparent' }: { bg?: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { setAddress, setEnsName } = useAppContext();
+
+  const { setAddress, setEnsName,user } = useAppContext();
+
   const { address } = useAccount();
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -32,6 +35,7 @@ const Header = ({ bg = 'transparent' }: { bg?: string }) => {
     //setEnsName(ensName);
   }, [address, setAddress]);
 
+  const isLoggedin=()=>( user && Object.keys(user).length>0);
   return (
     <>
       <header
@@ -50,7 +54,8 @@ const Header = ({ bg = 'transparent' }: { bg?: string }) => {
             Blog
           </Text>
         </HStack>
-        {address && (
+        {isLoggedin() && <LogoutButton/>}
+        {address && !isLoggedin() && (
           <HStack spacing={4}>
             <Button
               colorScheme='primaryColor'
