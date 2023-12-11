@@ -46,7 +46,7 @@ const WorkWithUs = () => {
             Join Us
           </Button> */}
             <input className='modal-state' id='modal-3' type='checkbox' />
-            <NutritionistForm />
+            <NutritionistForm showModal/>
           </>
         </div>
       </section>

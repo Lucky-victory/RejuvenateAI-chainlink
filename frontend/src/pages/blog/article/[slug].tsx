@@ -7,7 +7,7 @@ import { format } from "date-fns"
 import Head from "next/head"
 import { useState } from "react"
 
-export default ()=>{
+ const ArticleView =()=>{
     const [article,setArticle]=useState<Article>( {
         id: "1",
         slug: "sample-article",
@@ -72,3 +72,5 @@ export const DotDivider=()=>{
         </Flex>
     )
 }
+
+export default ArticleView

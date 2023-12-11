@@ -56,10 +56,10 @@ export default function CommunitiesTab() {
 const [isSubmitting,setIsSubmitting]=useState(false)
 // const [formData,setFormData]=useState({title:'',time:'',details:''})
 const router=useRouter()
-const {communities,setCommunity}=useAppContext()
+const {communities,setCommunity,setCommunities}=useAppContext()
   // form validation rules
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Field is required'),
+    name: Yup.string().required('Field is required').min(5),
     description: Yup.string().required('Field is required'),
     
     members:Yup.string().required('Field is required')
@@ -74,13 +74,14 @@ if(isValid){
 setIsSubmitting(true)
 
 const membersArray=data?.members?.split(',');
-const dataObject={description:data?.description,name:data?.name,cover:''
+const dataObject:Community={description:data?.description,name:data?.name,cover:''
 ,  id:uuid(),members:membersArray,membersCount:membersArray?.length,slug:generateSlug(data?.name)
 }
 console.log({dataObject});
-
-
 setTimeout(()=>{
+  
+  const prevCommunities=communities||[];
+  setCommunities([...prevCommunities,dataObject])
 setIsSubmitting(false)
 toast()
   onClose();

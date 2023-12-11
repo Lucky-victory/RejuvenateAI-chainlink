@@ -2,7 +2,7 @@
 import React, { RefObject, useRef, useState } from 'react';
 
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitErrorHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAppContext } from '@/context/state';
@@ -27,6 +27,8 @@ import {
   HStack,
   Input,
   Select,
+  useToast,
+  Text,
 } from '@chakra-ui/react';
 import { NewUserType, RegisterType } from '../new-user-type';
 //import { useAuth } from "near-social-bridge";
@@ -49,6 +51,14 @@ const RegisterForm = ({
 }) => {
   //const auth = useAuth()
   const { address } = useAccount();
+  
+  const toast = useToast({
+    duration: 3000,
+    position: 'top',
+    status: 'success',
+    title: 'Sign up was successful',
+  });
+  const [isSubmitting,setIsSubmitting]=useState(false)
   const router = useRouter();
   const swiperRef = useRef<SwiperRef>();
   const swiperNestedRef = useRef<SwiperRef>();
@@ -58,7 +68,7 @@ const RegisterForm = ({
     const { user, setUser, allTokensData } = useAppContext();
     const [amount, setAmount] = useState('0.01');
     const debouncedAmount = useDebounce<string>(amount, 500);
-
+const [hasError,setHasError]=useState(false);
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Field is required'),
@@ -78,8 +88,8 @@ const RegisterForm = ({
     smokingLength: Yup.string(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, formState } = useForm(formOptions);
-
+  const { register, handleSubmit, formState,reset } = useForm(formOptions);
+ 
   // get functions to build form with useForm() hook
   const { errors, isValid, isSubmitSuccessful } = formState;
   const [cid, setCid] = useState<string>('');
@@ -104,13 +114,25 @@ const RegisterForm = ({
     },
   });
 
-
+const onInvalidSubmit:SubmitErrorHandler<FieldValues>=(errors:any)=>{
+  if(!isValid){
+    setHasError(true)
+    
+        }
+        else{
+          setHasError(false)
+        }
+}
   const onValidSubmit = async (data: any) => {
-    if (isSubmitSuccessful) {
-      console.log({ data });
+    try{
+
+      if (isSubmitSuccessful) {
+        console.log({ data });
     }
+   
     //    const cid = await uploadPromptToIpfs(data);
     if (isValid) {
+      setIsSubmitting(true)
         // Serialize the form data into a JSON object
       const formDataObject = {
         fullName: data.fullName,
@@ -128,7 +150,7 @@ const RegisterForm = ({
         smokingStopped: data.smokingStopped,
         smokingLength: data.smokingLength,
       };
-
+      
       const cid = await putJSONandGetHash(formDataObject);
       
       setCid(cid);
@@ -140,7 +162,20 @@ const RegisterForm = ({
       });
 
       joinCommunity?.();
+
+      toast()
+      reset()
+setIsSubmitting(false);
+
     }
+  }
+  catch(error){
+setIsSubmitting(false);
+toast({
+  status:'error',title:'An error occured, please try again...',description:'Make sure you have a gas fee'
+})
+
+  }
   };
   //   const onInvalidSubmit = (errors:any,event:BaseSyntheticEvent) => {
   // event.preventDefault()
@@ -203,7 +238,8 @@ const RegisterForm = ({
               )}
               <span>Register</span>
             </HStack>
-          </ModalHeader>
+           {hasError &&  <Text color='red.600' my={1} fontWeight={'medium'} fontSize={'md'} as={'span'}>Please fill out all fields</Text>}
+          </ModalHeader> 
           <ModalCloseButton />
           <ModalBody>
             <Box
@@ -222,7 +258,7 @@ const RegisterForm = ({
               </SwiperSlide>
               <SwiperSlide>
                 {SelectedUserType == 'individual' && (
-                  <form onSubmit={handleSubmit(onValidSubmit)}>
+                  <form onSubmit={handleSubmit(onValidSubmit,onInvalidSubmit)}>
                     <Swiper
                       nested
                       allowTouchMove={false}
@@ -560,7 +596,7 @@ const RegisterForm = ({
                             Back
                           </Button>
 
-                          <Button type='submit'>
+                          <Button type='submit' isLoading={isSubmitting}>
                             Complete Sign Up
                           </Button>
                         </HStack>

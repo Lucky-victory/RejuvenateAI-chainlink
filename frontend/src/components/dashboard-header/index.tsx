@@ -1,26 +1,37 @@
 import { maskHexAddress } from '@/helpers';
-import {  Button, HStack, Text } from '@chakra-ui/react';
+import { Button, HStack, Text } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
-import Avatar from 'boring-avatars'
+import Avatar from 'boring-avatars';
 import Icon from '../Icon';
+import { useAppContext } from '@/context/state';
+import LogoutButton from '../LogoutButton';
 export default function DashBoardHeader(props: any) {
   const { address } = useAccount();
-
+  const { user, ensName } = useAppContext();
   return (
     <div className='flex items-center justify-between w-full bg-white py-2  px-4'>
-      <Text as={'span'} fontSize={{lg:'xl',base:'lg'}} fontWeight={'semibold'} className='text-primaryGreen '>
+      <Text
+        as={'span'}
+        fontSize={{ lg: 'xl', base: 'lg' }}
+        fontWeight={'semibold'}
+        className='text-primaryGreen '
+      >
         Welcome back
       </Text>
       <div className='flex items-center gap-3'>
         <HStack mr={4}>
+          <Avatar
+            variant='beam'
+            colors={['#928D26', '#1A6A7C', '#00AB3D', '#3371B4', '#0A20D90']}
+          />
 
-        <Avatar variant='beam' colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}/>
-       
-        <Text fontWeight={'semibold'} className='text-primaryGreen '>
-        {maskHexAddress(address as string)}
-        </Text>
+          <Text fontWeight={'semibold'} className='text-primaryGreen '>
+            {/* {maskHexAddress(user?.userAddress as string)} */}
+            {maskHexAddress(address as string)} 
+            {/* {ensName} */}
+          </Text>
         </HStack>
-        <Button size={'sm'} variant={'outline'} colorScheme='red' rounded={'full'}><Text mr={2} as={'span'}>Logout</Text> <Icon  size={20} name='logout'/></Button>
+        <LogoutButton />
       </div>
     </div>
   );

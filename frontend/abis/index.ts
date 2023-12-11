@@ -3,7 +3,7 @@
 // import {abi as nutritionistNftAbi} from "./NutritionistNFT.json";
 // import {abi as userNftAbi} from "./UserNFT.json";
 
-export const communityAbi =  [
+export const communityAbi = [
   {
     "inputs": [
       {
