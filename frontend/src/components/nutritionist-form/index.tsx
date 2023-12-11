@@ -16,7 +16,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
   const [cid, setCid] = useState('');
   const [Image, setImage] = useState<File | null>(null);
   const [ImageUrl, setImageUrl] = useState('');
-
+const [isSubmitting,setIsSubmitting]=useState(false)
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Field is required'),
@@ -44,7 +44,13 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
 
   const onSubmit = async (data: any) => {
     //    const cid = await uploadPromptToIpfs(data);
-    router.push('/nutritionist/dashboard');
+    setIsSubmitting(true)
+    
+    setTimeout(()=>{
+      router.push('/nutritionist/dashboard');
+
+      setIsSubmitting(false)
+    },2000)
     //const {file} = data;
   };
 
@@ -123,7 +129,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
           <div className='text-red-200'>{errors.credentials?.message}</div>
         </div>
         <div className='flex'>
-          <Button type='submit'>Register as a Nutritionist</Button>
+          <Button type='submit' isLoading={isSubmitting}>Register as a Nutritionist</Button>
         </div>
       </form>
     </>,
@@ -191,7 +197,7 @@ const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
             <div className='text-red-200'>{errors.credentials?.message}</div>
           </div>
           <div className='flex'>
-            <Button type='submit'>Register as a Nutritionist</Button>
+            <Button type='submit' isLoading={isSubmitting}>Register as a Nutritionist</Button>
           </div>
         </form>
       )}

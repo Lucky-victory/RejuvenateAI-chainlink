@@ -2,7 +2,7 @@
 import React, { RefObject, useRef, useState } from 'react';
 
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitErrorHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAppContext } from '@/context/state';
@@ -28,6 +28,7 @@ import {
   Input,
   Select,
   useToast,
+  Text,
 } from '@chakra-ui/react';
 import { NewUserType, RegisterType } from '../new-user-type';
 //import { useAuth } from "near-social-bridge";
@@ -67,7 +68,7 @@ const RegisterForm = ({
     const { user, setUser, allTokensData } = useAppContext();
     const [amount, setAmount] = useState('0.01');
     const debouncedAmount = useDebounce<string>(amount, 500);
-
+const [hasError,setHasError]=useState(false);
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Field is required'),
@@ -88,7 +89,7 @@ const RegisterForm = ({
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { register, handleSubmit, formState,reset } = useForm(formOptions);
-
+ 
   // get functions to build form with useForm() hook
   const { errors, isValid, isSubmitSuccessful } = formState;
   const [cid, setCid] = useState<string>('');
@@ -113,13 +114,22 @@ const RegisterForm = ({
     },
   });
 
-
+const onInvalidSubmit:SubmitErrorHandler<FieldValues>=(errors:any)=>{
+  if(!isValid){
+    setHasError(true)
+    
+        }
+        else{
+          setHasError(false)
+        }
+}
   const onValidSubmit = async (data: any) => {
     try{
 
       if (isSubmitSuccessful) {
         console.log({ data });
     }
+   
     //    const cid = await uploadPromptToIpfs(data);
     if (isValid) {
       setIsSubmitting(true)
@@ -228,7 +238,8 @@ toast({
               )}
               <span>Register</span>
             </HStack>
-          </ModalHeader>
+           {hasError &&  <Text color='red.600' my={1} fontWeight={'medium'} fontSize={'md'} as={'span'}>Please fill out all fields</Text>}
+          </ModalHeader> 
           <ModalCloseButton />
           <ModalBody>
             <Box
@@ -247,7 +258,7 @@ toast({
               </SwiperSlide>
               <SwiperSlide>
                 {SelectedUserType == 'individual' && (
-                  <form onSubmit={handleSubmit(onValidSubmit)}>
+                  <form onSubmit={handleSubmit(onValidSubmit,onInvalidSubmit)}>
                     <Swiper
                       nested
                       allowTouchMove={false}

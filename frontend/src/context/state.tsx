@@ -36,6 +36,7 @@ const defaultCommunities = [
   },
 ];
 
+
 const contextDefaultValue: stateContextType = {
   allTokensData: {},
   address: '',
@@ -81,7 +82,7 @@ export function AppWrapper({ children }: StateContextProviderProps) {
   const [community, setCommunity] = useState<Community | null>(null);
   const [communities, setCommunities] =
     useState<Community[]>(defaultCommunities);
-  const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
+  const [mealPlans, setMealPlans] = useState<MealPlan[]>(sampleMealPlans);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isUserConnected, setIsUserConnected] = useState<boolean>(false);
