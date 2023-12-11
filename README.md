@@ -1,11 +1,11 @@
 # RejuvenateAI x ChainLink hack 
 
-Live Demo - [Youtube video](https://youtu.be/G7vAsMd6zR0) <br />
-Live Link - [RejuvenateAI dapp](https://rejuvenate-ai-lukso-two.vercel.app/) <br />
+Live Demo - [Youtube video](https://youtu.be/bCPzqrTw5Mc) <br />
+Live Link - [RejuvenateAI dapp](https://rejuvenate-chainlink-hack.vercel.app/) <br />
 
 ## ✨ Description
 
-[RejuvenateAI](https://rejuvenate-ai-czgn.vercel.app/) is the first community blockchain based project powered by community built for community to promote healthy living and achieve  healthy locations where people live up to a 100 years all around the world. We are trying to make sure people live healthy by incorporating healthy habits into their lifestyle and trying to make sure they get the most out of the human experience by discovering their purpose if they haven't already and enjoying this life, all while doing it together as a community being accountable to each other.
+[RejuvenateAI](https://rejuvenate-chainlink-hack.vercel.app/) is the first community blockchain based project powered by community built for community to promote healthy living and achieve  healthy locations where people live up to a 100 years all around the world. We are trying to make sure people live healthy by incorporating healthy habits into their lifestyle and trying to make sure they get the most out of the human experience by discovering their purpose if they haven't already and enjoying this life, all while doing it together as a community being accountable to each other.
 
 ## Inspiration
 
@@ -30,23 +30,27 @@ Here's a breakdown of how it was built:
 
 2. Nutritionists can sign up with the ```applyForNutritionistRole``` function, which they will pass their credentials into and have their application status set to pending.
 
-3. We will then see their applicaiton status, and after verifying their credentials and see that it's legitimate we can now approve their status by calling the ```approveNutritionistRole``` function, which will approve the nutritionists and set their application status as accepted, and they can now be onboarded into our platform.
+3. We will then see their application status, and after verifying their credentials and see that it's legitimate we can now approve their status by calling the ```approveNutritionistRole``` function, which will approve the nutritionists and set their application status as accepted, and they can now be onboarded into our platform.
 
 4. Now these nutritionists can now create meal plans by calling ``createMealPlans`` which will create meal plans for users to access.
+
+5. When a user's subscription expires, their subscription status automatically expires and their access to our platform gets revoked and their user NFT gets burned automatically, this functionality is enabled by chainlink automation which calls the ``revokeUser`` function when their deadline elapses, they still remain members of our platform just that they can't access our services until they renew their subscription and they can now mint another user NFT
+
+6. Users can join communities and chat in these communities, the chat feature is powered by push protocol, there are also ongoing challenges and events going on in communities.
 
 
 ## Where we deployed to/contract details
 
-We created and deployed our smart contracts on the Avalanche testnet chain. 
+We created and deployed our smart contracts on the Avalanche fuji testnet chain. 
 
 ### Avalanche Testnet
 
-1. CommunityNetwork contract 0xb5c93ACAc8d4499293e81Fb07298c29d1DA4a455 - [View source code](https://github.com/degencodebeast/RejuvenateAI-lukso/blob/main/smart-contracts/contracts/CommunityNetwork.sol) | [View on Avalanche](https://explorer.execution.testnet.lukso.network/address/0xb5c93ACAc8d4499293e81Fb07298c29d1DA4a455)
+1. CommunityNetwork contract 0x3A3bc7C19bE0381294d8E7Bd311C123b76b33982 - [View source code](https://github.com/degencodebeast/RejuvenateAI-chainlink/blob/main/smart-contracts/contracts/CommunityNetwork.sol) | [View on Avalanche](https://testnet.snowtrace.io/address/0x3A3bc7C19bE0381294d8E7Bd311C123b76b33982)
 
-2. Treasury contract 0x192F0e1D589bEB01b5FFEF701a0a5B7049FFFa34 - [View source code](https://github.com/degencodebeast/RejuvenateAI-lukso/blob/main/smart-contracts/contracts/Treasury.sol) | [View on Avalanche](https://explorer.execution.testnet.lukso.network/address/0x192F0e1D589bEB01b5FFEF701a0a5B7049FFFa34)
+2. Treasury contract 0xdf2f1C4d00dF9b3b4c243d064D08F4B3FB6ede3E - [View source code](https://github.com/degencodebeast/RejuvenateAI-chainlink/blob/main/smart-contracts/contracts/Treasury.sol) | [View on Avalanche](https://testnet.snowtrace.io/address/0xdf2f1C4d00dF9b3b4c243d064D08F4B3FB6ede3E)
 
-3. User NFT contract 0x88cF82a3EfE628B35e5eca8817681f94F5ed15Df - [View source code](https://github.com/degencodebeast/RejuvenateAI-lukso/blob/main/smart-contracts/contracts/UserNFT.sol) | [View on Avalanche](https://explorer.execution.testnet.lukso.network/address/0x88cF82a3EfE628B35e5eca8817681f94F5ed15Df)
+3. User NFT contract 0x8E4508Dc5f0E17767C7c5b364cD4ee4f33e6C2e2 - [View source code](https://github.com/degencodebeast/RejuvenateAI-chainlink/blob/main/smart-contracts/contracts/UserNFT.sol) | [View on Avalanche](https://testnet.snowtrace.io/address/0x8E4508Dc5f0E17767C7c5b364cD4ee4f33e6C2e2)
 
-4. Nutritionist NFT contract 0x628ff8D815a6e3Eb6Fe84BfeC3c47692729ba3F3 - [View source code](https://github.com/degencodebeast/RejuvenateAI-lukso/blob/main/smart-contracts/contracts/NutritionistNFT.sol) | [View on Avalanche](https://explorer.execution.testnet.lukso.network/address/0x628ff8D815a6e3Eb6Fe84BfeC3c47692729ba3F3)
+4. Nutritionist NFT contract 0xE3B57b2d4b7CdF04024CE1C26488C6A4Ea561df8 - [View source code](https://github.com/degencodebeast/RejuvenateAI-chainlink/blob/main/smart-contracts/contracts/NutritionistNFT.sol) | [View on Avalanche](https://testnet.snowtrace.io/address/0xE3B57b2d4b7CdF04024CE1C26488C6A4Ea561df8)
 
 
