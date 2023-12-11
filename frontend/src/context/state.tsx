@@ -55,9 +55,8 @@ const contextDefaultValue: stateContextType = {
 
   setMealPlans: ()=>null,
   selectedMealPlan:  {},
-  setSelectedMealPlan: ()=>null
+  setSelectedMealPlan: ()=>null,
 
-  setMealPlans: () => null,
   ensName: null,
   setEnsName: () => null,
   ensAvatar: null,
@@ -112,7 +111,7 @@ export function AppWrapper({ children }: StateContextProviderProps) {
     setIsUserConnected,
     user,
         selectedMealPlan,
-        setSelectedMealPlan
+        setSelectedMealPlan,
     setUser,
     communities,
     community,
