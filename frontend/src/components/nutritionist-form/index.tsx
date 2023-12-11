@@ -10,7 +10,7 @@ import { uploadPromptToIpfs } from '@/helpers';
 import { toast } from 'react-toastify';
 import { Button, Input, Select } from '@chakra-ui/react';
 import { countries } from '@/utils/countries';
-const NutritionistForm = ({ showModal = true }: { showModal: boolean }) => {
+const NutritionistForm = ({ showModal = true }: { showModal?: boolean }) => {
   //const auth = useAuth()
   const router = useRouter();
   const [cid, setCid] = useState('');

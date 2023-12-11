@@ -13,7 +13,7 @@ import { NextResponse } from 'next/server';
       {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.HUDDLE_API_KEY,
+          'x-api-key': process.env.HUDDLE_API_KEY as string,
         },
       }
     );

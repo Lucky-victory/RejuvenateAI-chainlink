@@ -154,7 +154,7 @@ setValue('details',plan.details)
 {!mealPlans?.length &&
 
 <Flex bg={'gray.100'} minH={'250px'} my={5} justify={'center'} align={'center'}>
-  <Text color={'gray.500'} fontWeight={'medium'} fontSize={'xl'}>You don't any meal plan yet.</Text>
+  <Text color={'gray.500'} fontWeight={'medium'} fontSize={'xl'}>You don&apos;t any meal plan yet.</Text>
 </Flex>
 }
 {mealPlans?.length &&

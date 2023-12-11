@@ -28,7 +28,7 @@ setBtnIcon('done')
     <Box pos={'absolute'} roundedRight={'md'} left={0} bottom={0} bg={'primaryColor.700'} color={'white'} px={3} py={2}>
 <Text as={'span'} fontWeight={'bold'}>{plan?.time}</Text>
     </Box>
-<Image h={'full'} w={'full'} src="/images/meal-plan.jpg"/>
+<Image alt="" h={'full'} w={'full'} src="/images/meal-plan.jpg"/>
 </Box>
 <Box>
     <Heading size={'md'}>{plan?.title}</Heading>

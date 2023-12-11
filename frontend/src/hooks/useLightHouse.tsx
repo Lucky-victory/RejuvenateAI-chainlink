@@ -64,7 +64,6 @@ function useLightHouse() {
         'YOUR_API_KEY',
         sig?.publicKey as string,
         sig?.signedMessage as string,
-        undefined,
         progressCallback
       );
       console.log(response.data);
