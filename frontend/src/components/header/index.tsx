@@ -5,7 +5,7 @@ import { Link } from '@chakra-ui/next-js';
 import RejuvenateAi from '../../images/svg/rejuvenate-logo.svg';
 import { useAppContext } from '@/context/state';
 import RegisterForm from '../register-form';
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsName, useEnsAvatar} from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Button, HStack, Text, useDisclosure } from '@chakra-ui/react';
 import LogoutButton from '../LogoutButton';
@@ -13,13 +13,26 @@ import LogoutButton from '../LogoutButton';
 const Header = ({ bg = 'transparent' }: { bg?: string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { setAddress ,user} = useAppContext();
+
+  const { setAddress, setEnsName,user } = useAppContext();
+
   const { address } = useAccount();
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+  
+  // const { data: ensName } = useEnsName({
+  //   address: address,
+  //   chainId: 421613,
+  // });
+
+  // const { data: ensAvatar } = useEnsAvatar({
+  //   name: ensName,
+  //   chainId: 421613,
+  // });
 
   useEffect(() => {
     setAddress(`${address}`);
+    //setEnsName(ensName);
   }, [address, setAddress]);
 
   const isLoggedin=()=>( user && Object.keys(user).length>0);

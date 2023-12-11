@@ -11,8 +11,8 @@ export default function DashboardSideBar(props: {
   entryPath?: string;
   links: Array<{ title: string; url: string; icon: string }>;
 }) {
-  const {user}=useAppContext()
-const router=useRouter()
+  const { user } = useAppContext();
+  const router = useRouter();
   // useEffect(() => {
   //   // check if user is logged in
   //   if (!user || !Object.keys(user).length) {
@@ -47,7 +47,7 @@ const router=useRouter()
           alignItems={'center'}
           className='flex gap-[24px]'
         >
-          <Icon name={link?.icon} size={24}/>
+          <Icon name={link?.icon} size={24} />
           <span>{link?.title}</span>
         </Link>
       </ListItem>

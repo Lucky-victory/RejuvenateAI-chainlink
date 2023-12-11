@@ -21,6 +21,8 @@ contract SBT is Context, ERC165, IERC721, ISBT, IERC721Metadata {
 
     Counters.Counter private s_tokenIds;
 
+    uint256 public _totalSupply;
+
     // Token name
     string private _name;
 
@@ -147,6 +149,7 @@ contract SBT is Context, ERC165, IERC721, ISBT, IERC721Metadata {
             // this ever happens. Might change if we allow batch minting.
             // The ERC fails to describe this case.
             _balances[to] += 1;
+            _totalSupply += 1;
         }
 
         _owners[tokenId] = to;
@@ -183,6 +186,7 @@ contract SBT is Context, ERC165, IERC721, ISBT, IERC721Metadata {
             // this ever happens. Might change if we allow batch minting.
             // The ERC fails to describe this case.
             _balances[from] -= 1;
+            _totalSupply -= 1;
         }
 
         _owners[tokenId] = address(0);
@@ -294,5 +298,9 @@ contract SBT is Context, ERC165, IERC721, ISBT, IERC721Metadata {
      */
     function _baseURI() internal view virtual returns (string memory) {
         return "";
+    }
+
+    function totalSupply() public view virtual returns(uint256 ) {
+        return _totalSupply;
     }
 }

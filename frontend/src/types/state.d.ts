@@ -21,16 +21,21 @@ export type stateContextType = {
   setIsUserConnected: (data: boolean) => void;
   user: User;
   setUser: (data: any) => void;
-  communities:Community[]|null;
-  setCommunities:(data:Community[])=>void;
-    community:Community|null;
-    setCommunity:(data:Community|null)=>void;
-  mealPlans:MealPlan[]|null;
-  setMealPlans:(data:MealPlan[])=>void;
-  selectedMealPlan:MealPlan|null;
   setSelectedMealPlan:(data:MealPlan)=>void
+  selectedMealPlan:MealPlan|null;
+  
+  communities: Community[] | null;
+  setCommunities: (data: Community[]) => void
+  community: Community | null;
+  setCommunity: (data: Community | null) => void
+  mealPlans: MealPlan[] | null;
+  setMealPlans: (data: MealPlans[]) => void
+  ensName: any;
+  setEnsName: (data: any) => void;
+  ensAvatar: any;
+  setEnsAvatar: (data: any) => void;
 };
-export type User={
+export type User = {
   userAddress: string,
   name: string,
   userCidData?: string,
@@ -46,7 +51,7 @@ export type Community = {
   id: string;
   slug: string;
   members: object[];
-  messages?:ChatMessages[]|null
+  messages?: ChatMessages[] | null
 };
 export type ChatMessages = {
   id: string;
@@ -55,3 +60,5 @@ export type ChatMessages = {
   fullname: string;
   timestamp: Date | number;
 };
+
+
