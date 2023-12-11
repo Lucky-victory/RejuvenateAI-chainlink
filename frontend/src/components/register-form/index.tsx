@@ -2,7 +2,7 @@
 import React, { RefObject, useRef, useState } from 'react';
 
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FieldValues, SubmitErrorHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useAppContext } from '@/context/state';
@@ -114,19 +114,22 @@ const [hasError,setHasError]=useState(false);
     },
   });
 
-
+const onInvalidSubmit:SubmitErrorHandler<FieldValues>=(errors:any)=>{
+  if(!isValid){
+    setHasError(true)
+    
+        }
+        else{
+          setHasError(false)
+        }
+}
   const onValidSubmit = async (data: any) => {
     try{
 
       if (isSubmitSuccessful) {
         console.log({ data });
     }
-    if(!isValid){
-setHasError(true)
-    }
-    else{
-      setHasError(false)
-    }
+   
     //    const cid = await uploadPromptToIpfs(data);
     if (isValid) {
       setIsSubmitting(true)
@@ -235,8 +238,8 @@ toast({
               )}
               <span>Register</span>
             </HStack>
-           {hasError&&  <Text color='red.600' my={2}>Please fill out all fields</Text>}
-          </ModalHeader>
+           {hasError &&  <Text color='red.600' my={1} fontWeight={'medium'} fontSize={'md'} as={'span'}>Please fill out all fields</Text>}
+          </ModalHeader> 
           <ModalCloseButton />
           <ModalBody>
             <Box
@@ -255,7 +258,7 @@ toast({
               </SwiperSlide>
               <SwiperSlide>
                 {SelectedUserType == 'individual' && (
-                  <form onSubmit={handleSubmit(onValidSubmit)}>
+                  <form onSubmit={handleSubmit(onValidSubmit,onInvalidSubmit)}>
                     <Swiper
                       nested
                       allowTouchMove={false}

@@ -35,7 +35,7 @@ const Header = ({ bg = 'transparent' }: { bg?: string }) => {
     //setEnsName(ensName);
   }, [address, setAddress]);
 
-  const isLoggedin=()=>( user && Object.keys(user).length>0);
+  const isLoggedin=()=>( user && user?.userAddress!=='');
   return (
     <>
       <header
@@ -53,9 +53,12 @@ const Header = ({ bg = 'transparent' }: { bg?: string }) => {
           <Text as={Link} href={'/blog'} fontWeight={'medium'}>
             Blog
           </Text>
+          <Text as={Link} href={'/meal-plans'} fontWeight={'medium'}>
+            Meal Plans
+          </Text>
         </HStack>
         {/* {isLoggedin() && <LogoutButton/>} */}
-        {address && !isLoggedin() && (
+        {(address && !isLoggedin()) && (
           <HStack spacing={4}>
             <Button
               colorScheme='primaryColor'
