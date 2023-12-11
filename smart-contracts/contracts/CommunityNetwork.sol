@@ -29,7 +29,7 @@ error InvalidDeadline();
 
 error InvalidSubStatus();
 
-contract CommunityChainlink is Ownable {
+contract CommunityNetwork is Ownable {
     LinkTokenInterface public immutable i_link;
     address public immutable registrar;
     AutomationRegistryInterface public immutable i_registry;
@@ -40,6 +40,7 @@ contract CommunityChainlink is Ownable {
 
     Counters.Counter private _applicantIndexCounter;
     Counters.Counter private _userIndexCounter;
+    Counters.Counter private communityIdCounter;
 
     INutritionistNFT public nutritionistNFT;
 
@@ -48,6 +49,10 @@ contract CommunityChainlink is Ownable {
     mapping(address => uint256) public applicantToIndex;
 
     mapping(address => uint256) public userToIndex;
+
+    mapping(address => Community) public userToCommunity;
+
+    mapping(uint256 => Community) public idToCommunity;
 
     uint256 public constant userApplicationFee = 0.01 ether;
 
@@ -95,6 +100,15 @@ contract CommunityChainlink is Ownable {
         Active,
         Expired
     }
+
+    struct Community {
+        uint256 id;
+        string name;
+        string communityDescription;
+        address[] members;
+    }
+
+    Community[] public allCommunities;
 
     struct NutritionistApplication {
         string dataURI;
@@ -164,6 +178,7 @@ contract CommunityChainlink is Ownable {
         i_link = _link;
         registrar = _registrar;
         i_registry = _registry;
+        communityIdCounter.increment();
     }
 
     /// @notice Restrict access to trusted `nutritionists`
@@ -450,6 +465,10 @@ contract CommunityChainlink is Ownable {
         _nutritionist.nutritionistMealplans.push(mealPlan);
     }
 
+    function getAllMealPlans() public view returns (MealPlans[] memory) {
+        return allMealPlans;
+    }
+
     function createFitnessPlan(
         string memory _fitnessName,
         string memory fitnessDesc
@@ -461,6 +480,10 @@ contract CommunityChainlink is Ownable {
             msg.sender
         );
         _nutritionist.fitnessPlans.push(fitnessPlan);
+    }
+
+    function getAllFitnessPlans() public view returns (FitnessPlans[] memory) {
+        return allFitnessPlans;
     }
 
     function createConsultation(
@@ -488,6 +511,39 @@ contract CommunityChainlink is Ownable {
         );
         _nutritionist.nutritionistArticles.push(article);
         allArticles.push(article);
+    }
+
+    function getAllArticles() public view returns (Articles[] memory) {
+        return allArticles;
+    }
+
+    function createCommunity(
+        string memory name,
+        string memory communityDesc,
+        address[] memory _members
+    ) public {
+        uint256 index = communityIdCounter.current();
+        Community memory _community = Community(
+            index,
+            name,
+            communityDesc,
+            _members
+        );
+        idToCommunity[index] = _community;
+        allCommunities.push(_community);
+        for (uint16 i; i < _members.length; i++) {
+            userToCommunity[_members[i]] = _community;
+        }
+        communityIdCounter.increment();
+    }
+
+    function joinCommunity(uint256 _communityId) public {
+        Community memory _community = idToCommunity[_communityId];
+        userToCommunity[msg.sender] = _community;
+    }
+
+    function getAllCommunties() public view returns (Community[] memory) {
+        return allCommunities;
     }
 
     function registerAndPredictID(
