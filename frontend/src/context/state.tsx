@@ -1,8 +1,8 @@
 'use client';
 import { createContext, useContext, useState } from 'react';
 import { Community, User, stateContextType } from '../types/state';
-import { useAccount, useNetwork, useWalletClient } from 'wagmi';
-import { MealPlan} from '@/types/shared'
+import { useAccount, useNetwork, useWalletClient, useEnsName } from 'wagmi';
+import { MealPlan } from '@/types/shared';
 const defaultCommunities = [
   {
     name: 'All for good',
@@ -47,12 +47,16 @@ const contextDefaultValue: stateContextType = {
   setIsUserConnected: () => null,
   user: {} as User,
   setUser: () => null,
-  communities:defaultCommunities,
-  community:null,
-  setCommunities:()=> null,
-  setCommunity:()=>null,
+  communities: defaultCommunities,
+  community: null,
+  setCommunities: () => null,
+  setCommunity: () => null,
   mealPlans: [] as MealPlan[],
-  setMealPlans: ()=>null
+  setMealPlans: () => null,
+  ensName: null,
+  setEnsName: () => null,
+  ensAvatar: null,
+  setEnsAvatar: () => null
 };
 
 type StateContextProviderProps = {
@@ -67,11 +71,14 @@ export function AppWrapper({ children }: StateContextProviderProps) {
     nutritionistNftUri: '',
   });
   const [address, setAddress] = useState<string>('');
-  const [community, setCommunity] = useState<Community|null>(null);
-  const [communities, setCommunities] = useState<Community[]>(defaultCommunities);
+  const [community, setCommunity] = useState<Community | null>(null);
+  const [communities, setCommunities] =
+    useState<Community[]>(defaultCommunities);
   const [mealPlans, setMealPlans] = useState<MealPlan[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isUserConnected, setIsUserConnected] = useState<boolean>(false);
+  const [ensName, setEnsName] = useState<any>();
+  const [ensAvatar, setEnsAvatar] = useState<any>();
 
   const [user, setUser] = useState<User>({
     userAddress: '',
@@ -95,7 +102,15 @@ export function AppWrapper({ children }: StateContextProviderProps) {
     isUserConnected,
     setIsUserConnected,
     user,
-    setUser,communities,community,setCommunities,setCommunity
+    setUser,
+    communities,
+    community,
+    setCommunities,
+    setCommunity,
+    ensName,
+    setEnsName,
+    ensAvatar,
+    setEnsAvatar
   };
 
   return (
