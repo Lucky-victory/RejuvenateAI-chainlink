@@ -22,11 +22,13 @@ export type stateContextType = {
   user: User;
   setUser: (data: any) => void;
   communities:Community[]|null;
-  setCommunities:(data:Community[])=>void
-  community:Community|null;
-  setCommunity:(data:Community|null)=>void
+  setCommunities:(data:Community[])=>void;
+    community:Community|null;
+    setCommunity:(data:Community|null)=>void;
   mealPlans:MealPlan[]|null;
-  setMealPlans:(data:MealPlans[])=>void
+  setMealPlans:(data:MealPlan[])=>void;
+  selectedMealPlan:MealPlan|null;
+  setSelectedMealPlan:(data:MealPlan)=>void
 };
 export type User={
   userAddress: string,
