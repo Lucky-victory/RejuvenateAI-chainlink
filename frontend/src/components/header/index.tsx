@@ -54,7 +54,7 @@ const Header = ({ bg = 'transparent' }: { bg?: string }) => {
             Blog
           </Text>
         </HStack>
-        {isLoggedin() && <LogoutButton/>}
+        {/* {isLoggedin() && <LogoutButton/>} */}
         {address && !isLoggedin() && (
           <HStack spacing={4}>
             <Button

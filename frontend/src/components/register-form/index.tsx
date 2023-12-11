@@ -28,6 +28,7 @@ import {
   Input,
   Select,
   useToast,
+  Text,
 } from '@chakra-ui/react';
 import { NewUserType, RegisterType } from '../new-user-type';
 //import { useAuth } from "near-social-bridge";
@@ -67,7 +68,7 @@ const RegisterForm = ({
     const { user, setUser, allTokensData } = useAppContext();
     const [amount, setAmount] = useState('0.01');
     const debouncedAmount = useDebounce<string>(amount, 500);
-
+const [hasError,setHasError]=useState(false);
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Field is required'),
@@ -88,7 +89,7 @@ const RegisterForm = ({
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { register, handleSubmit, formState,reset } = useForm(formOptions);
-
+ 
   // get functions to build form with useForm() hook
   const { errors, isValid, isSubmitSuccessful } = formState;
   const [cid, setCid] = useState<string>('');
@@ -119,6 +120,12 @@ const RegisterForm = ({
 
       if (isSubmitSuccessful) {
         console.log({ data });
+    }
+    if(!isValid){
+setHasError(true)
+    }
+    else{
+      setHasError(false)
     }
     //    const cid = await uploadPromptToIpfs(data);
     if (isValid) {
@@ -228,6 +235,7 @@ toast({
               )}
               <span>Register</span>
             </HStack>
+           {hasError&&  <Text color='red.600' my={2}>Please fill out all fields</Text>}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
