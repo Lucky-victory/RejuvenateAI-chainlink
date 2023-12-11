@@ -8,13 +8,13 @@ import { WagmiConfig, createConfig, configureChains } from "wagmi";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import { arbitrumGoerli } from "wagmi/chains";
+import { arbitrumGoerli, avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { useEffect, useState } from "react";
 
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [arbitrumGoerli],
+  [avalancheFuji],
   [publicProvider()]
 );
 
