@@ -51,24 +51,24 @@ const RegisterForm = ({
 }) => {
   //const auth = useAuth()
   const { address } = useAccount();
-  
+
   const toast = useToast({
     duration: 3000,
     position: 'top',
     status: 'success',
     title: 'Sign up was successful',
   });
-  const [isSubmitting,setIsSubmitting]=useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const swiperRef = useRef<SwiperRef>();
   const swiperNestedRef = useRef<SwiperRef>();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [SelectedUserType, setSelectedUserType] =
     useState<RegisterType>('individual');
-    const { user, setUser, allTokensData } = useAppContext();
-    const [amount, setAmount] = useState('0.01');
-    const debouncedAmount = useDebounce<string>(amount, 500);
-const [hasError,setHasError]=useState(false);
+  const { user, setUser, allTokensData } = useAppContext();
+  const [amount, setAmount] = useState('0.01');
+  const debouncedAmount = useDebounce<string>(amount, 500);
+  const [hasError, setHasError] = useState(false);
   // form validation rules
   const validationSchema = Yup.object().shape({
     fullName: Yup.string().required('Field is required'),
@@ -88,8 +88,8 @@ const [hasError,setHasError]=useState(false);
     smokingLength: Yup.string(),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, formState,reset } = useForm(formOptions);
- 
+  const { register, handleSubmit, formState, reset } = useForm(formOptions);
+
   // get functions to build form with useForm() hook
   const { errors, isValid, isSubmitSuccessful } = formState;
   const [cid, setCid] = useState<string>('');
@@ -98,13 +98,13 @@ const [hasError,setHasError]=useState(false);
     //@ts-ignore
     address: communityAddr,
     abi: communityAbi,
-    functionName: 'joinCommunity',
+    functionName: 'registerUser',
     args: [cid, allTokensData.userNftUri],
     //@ts-ignore
     value: ethers.utils.parseEther(debouncedAmount || '0'),
   });
 
-  const { write: joinCommunity, data } = useContractWrite(config);
+  const { write: registerUser, data } = useContractWrite(config);
 
   const { isLoading } = useWaitForTransaction({
     hash: data?.hash,
@@ -114,68 +114,65 @@ const [hasError,setHasError]=useState(false);
     },
   });
 
-const onInvalidSubmit:SubmitErrorHandler<FieldValues>=(errors:any)=>{
-  if(!isValid){
-    setHasError(true)
-    
-        }
-        else{
-          setHasError(false)
-        }
-}
-  const onValidSubmit = async (data: any) => {
-    try{
+  const onInvalidSubmit: SubmitErrorHandler<FieldValues> = (errors: any) => {
+    if (!isValid) {
+      setHasError(true);
+    } else {
+      setHasError(false);
+    }
+  };
 
+  const onValidSubmit = async (data: any) => {
+    try {
       if (isSubmitSuccessful) {
         console.log({ data });
-    }
-   
-    //    const cid = await uploadPromptToIpfs(data);
-    if (isValid) {
-      setIsSubmitting(true)
+      }
+
+      //    const cid = await uploadPromptToIpfs(data);
+      if (isValid) {
+        setIsSubmitting(true);
         // Serialize the form data into a JSON object
-      const formDataObject = {
-        fullName: data.fullName,
-        sex: data.sex,
-        weight: data.weight,
-        height: data.height,
-        diet: data.diet,
-        active: data.active,
-        sitting: data.sitting,
-        alcohol: data.alcohol,
-        smoke: data.smoke,
-        sleepLength: data.sleepLength,
-        overallHealth: data.overallHealth,
-        birthDate: data.birthDate,
-        smokingStopped: data.smokingStopped,
-        smokingLength: data.smokingLength,
-      };
-      
-      const cid = await putJSONandGetHash(formDataObject);
-      
-      setCid(cid);
-      setUser({
-        ...user,
-        userAddress: address,
-        userCidData: cid,
-        name: data.fullName,
+        const formDataObject = {
+          fullName: data.fullName,
+          sex: data.sex,
+          weight: data.weight,
+          height: data.height,
+          diet: data.diet,
+          active: data.active,
+          sitting: data.sitting,
+          alcohol: data.alcohol,
+          smoke: data.smoke,
+          sleepLength: data.sleepLength,
+          overallHealth: data.overallHealth,
+          birthDate: data.birthDate,
+          smokingStopped: data.smokingStopped,
+          smokingLength: data.smokingLength,
+        };
+
+        const cid = await putJSONandGetHash(formDataObject);
+
+        setCid(cid);
+        setUser({
+          ...user,
+          userAddress: address,
+          userCidData: cid,
+          name: data.fullName,
+        });
+
+        registerUser?.();
+
+        toast();
+        reset();
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      setIsSubmitting(false);
+      toast({
+        status: 'error',
+        title: 'An error occured, please try again...',
+        description: 'Make sure you have a gas fee',
       });
-
-      joinCommunity?.();
-
-      toast()
-      reset()
-setIsSubmitting(false);
-
     }
-  }
-  catch(error){
-setIsSubmitting(false);
-toast({
-  status:'error',title:'An error occured, please try again...',description:'Make sure you have a gas fee'
-})
-
-  }
   };
   //   const onInvalidSubmit = (errors:any,event:BaseSyntheticEvent) => {
   // event.preventDefault()
@@ -238,8 +235,18 @@ toast({
               )}
               <span>Register</span>
             </HStack>
-           {hasError &&  <Text color='red.600' my={1} fontWeight={'medium'} fontSize={'md'} as={'span'}>Please fill out all fields</Text>}
-          </ModalHeader> 
+            {hasError && (
+              <Text
+                color='red.600'
+                my={1}
+                fontWeight={'medium'}
+                fontSize={'md'}
+                as={'span'}
+              >
+                Please fill out all fields
+              </Text>
+            )}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box
@@ -258,7 +265,7 @@ toast({
               </SwiperSlide>
               <SwiperSlide>
                 {SelectedUserType == 'individual' && (
-                  <form onSubmit={handleSubmit(onValidSubmit,onInvalidSubmit)}>
+                  <form onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
                     <Swiper
                       nested
                       allowTouchMove={false}
